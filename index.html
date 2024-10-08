@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JoyBoy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../../photo/2094405.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <h2 class="logo">JoyBoy</h2>
+    <nav class="navmenu">
+      <a href="#">Home</a>
+      <a href="Game Character slider/Tutorial.html">Games</a>
+      <a href="about us/about.html">About</a>
+    </nav>
+    <div id="menu-icon">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <span>Welcome to JoyBoy</span>
+      <h1>Rediscover Nostalgia</h1>
+      <p>Play all your favorite classic games and relive the memories. Enjoy hours of fun with a community of gamers.</p> <br>
+      <a href="Game Character slider/Tutorial.html" class="cta-btn" style="margin-top: auto;">Let's Play!</a>
+    </div>
+    <div class="hero-img">
+      <img src="Photo/luffy.png" alt="Hero Image">
+    </div>
+  </section>
+
+  <!-- Review Section -->
+  <section class="review-container">
+    <div class="review-img">
+      <img src="Photo/Rating1.png" alt="Review Image">
+    </div>
+    <div class="review-text">
+      <p>Experience the magic of classic games reimagined for the modern era. Join us and take a trip down memory lane with JoyBoy.</p>
+      <a href="review/index.html" class="cta-btn">Give Review</a>
+    </div>
+  </section>
+
+  <!-- Testimonial Carousel Section -->
+  <section class="carousel-container">
+    <h1 style="text-align: center; font-size: 50px;">Testimonials</h1>
+    <div class="carousel-track" id="carousel-track">
+      <!-- Carousel slides will be dynamically inserted here -->
+    </div>
+    <button class="carousel-btn prev-btn" id="prevBtn">&#10094;</button>
+    <button class="carousel-btn next-btn" id="nextBtn">&#10095;</button>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2024 JoyBoy. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript for Carousel and Menu -->
+  <script>
+    const menuIcon = document.getElementById('menu-icon');
+    const navmenu = document.querySelector('.navmenu');
+
+    menuIcon.addEventListener('click', () => {
+      navmenu.classList.toggle('open');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('https://script.google.com/macros/s/AKfycbz8j4sngUIFMJYnbQB_IHEBeh-fJER4DF_RJwVLOae7zB7sfBHcqmHODoiscxqadqDshw/exec?action=getReviews')
+        .then(response => response.json())
+        .then(data => {
+          const carouselTrack = document.getElementById('carousel-track');
+
+          data.forEach(review => {
+            const slide = document.createElement('div');
+            slide.classList.add('carousel-slide');
+
+            slide.innerHTML = `
+              <h3>${review.username} - ${review.game}</h3>
+              <p>${review.review}</p>
+              <div class="rating">Rating: ${review.rating}</div>
+              <div class="timestamp">${new Date(review.timestamp).toLocaleDateString()}</div>
+            `;
+
+            carouselTrack.appendChild(slide);
+          });
+
+          // Carousel functionality
+          const track = document.getElementById('carousel-track');
+          const slides = Array.from(track.children);
+          let currentSlide = 0;
+
+          function updateCarouselPosition() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+          }
+
+          document.getElementById('nextBtn').addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarouselPosition();
+          });
+
+          document.getElementById('prevBtn').addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateCarouselPosition();
+          });
+        });
+    });
+  </script>
+
+</body>
+</html>

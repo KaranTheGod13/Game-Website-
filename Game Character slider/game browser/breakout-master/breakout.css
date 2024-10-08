@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+}
+
+#board {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 5px solid skyblue;
+    display: block;
+    margin: 50px auto;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}

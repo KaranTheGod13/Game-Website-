@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            text-decoration: none;
+        }
+        body {
+            color: #fff;
+            background: #0f051d;
+            overflow-x: hidden;
+        }
+      
+        .team {
+          margin-top: 10%;
+            padding: 50px 5%;
+            text-align: center;
+        }
+        .team-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .box {
+            background: #1b1229;
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .box:hover {
+            transform: translateY(-10px);
+            background: #281c3e;
+        }
+        .box img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+        .box h3 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+        .box h5 {
+            font-size: 1rem;
+            color: #b7b4bb;
+            margin-bottom: 15px;
+        }
+        .icons a {
+            color: #fff;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        .icons a:hover {
+            color: #ffcc00;
+        }
+        .contact {
+            padding: 50px 5%;
+            background: #1b1229;
+            text-align: center;
+        }
+        .contact h2 {
+            margin-bottom: 20px;
+        }
+        .contact form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .contact input, .contact textarea {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #3c2f57;
+            background: #281c3e;
+            color: #fff;
+        }
+        .contact button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #ffcc00;
+            color: #000;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .contact button:hover {
+            background: #e6b800;
+        }
+        footer {
+            background: #1c2137;;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .header-logo {
+                font-size: 1.5rem;
+            }
+            .box h3 {
+                font-size: 1.2rem;
+            }
+            .box h5 {
+                font-size: 0.9rem;
+            }
+        }
+        :root {
+          --text-color: #fff;
+          --main-color: #514e61;
+          --background-color: #1c2137;
+          --h1-font: 5.5rem;
+          --p-font: 1.3rem;
+        }
+    
+        body {
+          color: var(--text-color);
+          font-family: 'Space Grotesk', sans-serif;
+          background-color: var(--background-color);
+        }
+    
+        header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          right: 0;
+          z-index: 1000;
+          background: var(--background-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 10%;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          transition: all 0.55s ease;
+          height: 100px;
+        }
+    
+        .logo {
+          font-size: 50px;
+          font-weight: bolder;
+          color: var(--text-color);
+        }
+    
+        .navmenu {
+          display: flex;
+          align-items: center;
+        }
+    
+        .navmenu a {
+          display: inline-block;
+          margin: 0 20px;
+          color: var(--text-color);
+         
+          transition: all 0.3s;
+          font-size: 20px;
+        }
+    
+        .navmenu a:hover {
+          color: var(--main-color);
+        }
+    
+        .nav-right {
+          display: flex;
+          align-items: center;
+        }
+    
+        .nav-btn {
+          display: inline-block;
+          background: var(--main-color);
+          border-radius: 8px;
+          color: var(--text-color);
+          padding: 10px 20px;
+          font-size: 1rem;
+          font-weight: 500;
+          transition: 0.5s;
+        }
+    
+        .nav-btn:hover {
+          background: var(--text-color);
+          color: var(--background-color);
+        }
+    
+        #menu-icon {
+          font-size: 2rem;
+          cursor: pointer;
+          display: none;
+        }
+     
+    </style>
+    <link rel="icon" href="Photo/2094405.png" type="image/png">
+</head>
+<body>
+  
+  <header>
+    <h2 class="logo">JoyBoy</h2>
+    <div class="navmenu">
+      <a href="../index.html">Home</a>
+      <a href="../Game Character slider/Tutorial.html">Games</a>
+      <a href="#">About</a>
+    </div>
+    <div id="menu-icon">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+    
+    <section class="team">
+        <h1 style="font-size: 50px;">Our Team</h1> <br> 
+        <div class="team-content">
+            <div class="box">
+                <img src="Photo/01.png" alt="Parshva Shah">
+                <h3>Parshva Shah</h3>
+                <h5>Project Manager and Game Developer</h5>
+                <div class="icons">
+                    <a href="https://github.com/otakuparshva" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/parshva-shah-72528020b/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    
+                </div>
+            </div>
+            <div class="box">
+                <img src="Photo/02.png" alt="Karan Gandhi">
+                <h3>Karan Gandhi</h3>
+                <h5>Frontend Developer</h5>
+                <div class="icons">
+                    <a href="https://github.com/KaranTheGod13" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/karan-gandhi-982382239/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    
+                </div>
+            </div>
+            <div class="box">
+                <img src="Photo/03.png" alt="Meet Gupta">
+                <h3>Meet Gupta</h3>
+                <h5>Game Developer</h5>
+                <div class="icons">
+                    <a href="https://github.com/Meet-GU" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/meet-gupta-b3a06a222/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                   
+                </div>
+            </div>
+            <div class="box">
+                <img src="Photo/04.png" alt="Parth Desai">
+                <h3>Parth Desai</h3>
+                <h5>Backend and Database</h5>
+                <div class="icons">
+                    <a href="https://github.com/parthdesai02" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/parth-desai-64652b324/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer>
+        <p>&copy; 2024 JoyBoy. All rights reserved.</p>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Your message has been sent!');
+            this.reset();
+        });
+    </script>
+   
+</body>
+</html>

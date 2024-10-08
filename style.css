@@ -1,0 +1,301 @@
+/* Reset default margin, padding, and box-sizing for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, #1c1c28 0%, #2e2e44 50%, #1a1a2d 100%);
+  color: #f7f7f7;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Header styling */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(28, 33, 55, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 8%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo styling */
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f7f7f7;
+  text-transform: uppercase;
+}
+
+/* Navigation menu styling */
+.navmenu {
+  display: flex;
+  align-items: center;
+}
+
+.navmenu a {
+  margin: 0 20px;
+  color: #f7f7f7;
+  font-size: 1.2rem;
+  text-decoration: none;
+  position: relative;
+}
+
+.navmenu a:hover {
+  color: #ffbe0b;
+}
+
+.navmenu a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #ffbe0b;
+  left: 0;
+  bottom: -3px;
+  transition: width 0.3s ease;
+}
+
+.navmenu a:hover::after {
+  width: 100%;
+}
+
+#menu-icon {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #f7f7f7;
+  display: none;
+}
+
+/* Hero section styling */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 120px 8%;
+  height: 100vh;
+}
+
+.hero-text {
+  max-width: 600px;
+  animation: fadeInLeft 1s ease forwards;
+  opacity: 0;
+}
+
+.hero-text span {
+  color: #ffbe0b;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.hero-text h1 {
+  font-size: 4rem;
+  margin: 20px 0;
+}
+
+.hero-text p {
+  font-size: 1.3rem;
+}
+
+.cta-btn {
+  padding: 12px 30px;
+  background: #ffbe0b;
+  border-radius: 5px;
+  color: #1c1c28;
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 30px;
+}
+
+.cta-btn:hover {
+  background: #f7f7f7;
+  color: #1c1c28;
+  transform: translateY(-5px);
+}
+
+.hero-img img {
+  max-width: 500px;
+  transition: transform 0.5s ease;
+}
+
+.hero-img img:hover {
+  transform: scale(1.05);
+}
+
+/* Review section styling */
+.review-container {
+  display: flex;
+  align-items: center;
+  padding: 80px 8%;
+  background: linear-gradient(135deg, #1c1c28 0%, #2e2e44 50%, #1a1a2d 100%);
+}
+
+.review-img {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.review-img img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.review-text {
+  flex: 1;
+  padding-left: 40px;
+}
+
+.review-text p {
+  font-size: 1.3rem;
+}
+
+.review-text .cta-btn {
+  margin-top: 20px;
+}
+
+/* Carousel section styling */
+.carousel-container {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  margin: 60px auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.carousel-slide h3 {
+  margin-bottom: 10px;
+}
+
+.carousel-slide .rating {
+  font-weight: bold;
+}
+
+.carousel-slide .timestamp {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  z-index: 100;
+}
+
+.carousel-btn:hover {
+  background-color: #ffbe0b;
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+/* Footer styling */
+footer {
+  background: rgba(28, 33, 55, 0.95);
+  padding: 20px 8%;
+  text-align: center;
+  color: #f7f7f7;
+  font-size: 1rem;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .navmenu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(28, 33, 55, 0.95);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 200px;
+  }
+
+  .navmenu.open {
+    display: flex;
+  }
+
+  #menu-icon {
+    display: block;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 80px 5%;
+  }
+
+  .hero-text {
+    margin-bottom: 20px;
+  }
+
+  .review-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .review-img {
+    margin-bottom: 20px;
+  }
+
+  .carousel-container {
+    width: 90%;
+  }
+
+  .carousel-btn {
+    font-size: 1.2rem;
+    padding: 10px;
+  }
+}
+
+/* Keyframes for animations */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

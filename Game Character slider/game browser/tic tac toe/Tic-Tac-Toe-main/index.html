@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <link rel="icon" href="../../../photo/2094405.png" type="image/png">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #0b2525;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            
+        }
+
+        #gameBoard {
+            margin-top: 20px;
+        }
+
+        canvas {
+            border: 5px solid #ffffff;
+        }
+
+        button {
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+/* CSS */
+.button-62, button {
+  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+  border: 0;
+  border-radius: 12px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 2.5;
+  outline: transparent;
+  padding: 10px 40px;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.button-62:not([disabled]):focus, button {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+
+.button-62:not([disabled]):hover, button {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div id="gameBoard">
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+    </div>
+    <button id="playButton" class="button-62" role="button">Play</button>
+    <button id="playAgainButton" style="display: none;">Play Again</button>
+    <div id="message"></div>
+    <script>
+        const WIDTH = 600, HEIGHT = 600;
+        const LINE_WIDTH = 15;
+        const BOARD_ROWS = 3, BOARD_COLS = 3;
+        const SQUARE_SIZE = WIDTH / BOARD_COLS;
+        const CIRCLE_RADIUS = SQUARE_SIZE / 3;
+        const CIRCLE_WIDTH = 15, CROSS_WIDTH = 25;
+        const SPACE = SQUARE_SIZE / 4;
+        const BUTTON_WIDTH = 200, BUTTON_HEIGHT = 50;
+        const Q_LEARNING_ALPHA = 0.6;
+        const Q_LEARNING_GAMMA = 0.9;
+        const Q_LEARNING_EPSILON = 0.2;
+
+        const BG_COLOR = '#1CAAA8';
+        const LINE_COLOR = '#179187';
+        const CIRCLE_COLOR = '#EFE7C8';
+        const CROSS_COLOR = '#424242';
+        const TEXT_COLOR = '#FFFFFF';
+        const BUTTON_COLOR = '#32CD32';
+        const BUTTON_HOVER_COLOR = '#228B22';
+
+        let canvas = document.getElementById('gameCanvas');
+        let context = canvas.getContext('2d');
+        let board = Array.from({ length: BOARD_ROWS }, () => Array(BOARD_COLS).fill(null));
+        let player = 'o';
+        let gameOver = false;
+        let winner = null;
+        let gameStarted = false;
+        let qTable = initializeQTable();
+        let lastState = null;
+        let lastAction = null;
+
+        const playButton = document.getElementById('playButton');
+        const playAgainButton = document.getElementById('playAgainButton');
+        const messageDiv = document.getElementById('message');
+
+        function initializeQTable() {
+            let qTable = {};
+            for (let row = 0; row < BOARD_ROWS; row++) {
+                for (let col = 0; col < BOARD_COLS; col++) {
+                    qTable[`${row},${col}`] = [0, 0, 0];
+                }
+            }
+            return qTable;
+        }
+
+        function drawBoard() {
+            context.clearRect(0, 0, WIDTH, HEIGHT);
+            context.strokeStyle = LINE_COLOR;
+            context.lineWidth = LINE_WIDTH;
+            for (let row = 1; row < BOARD_ROWS; row++) {
+                context.beginPath();
+                context.moveTo(0, row * SQUARE_SIZE);
+                context.lineTo(WIDTH, row * SQUARE_SIZE);
+                context.stroke();
+                context.beginPath();
+                context.moveTo(row * SQUARE_SIZE, 0);
+                context.lineTo(row * SQUARE_SIZE, HEIGHT);
+                context.stroke();
+            }
+        }
+
+        function drawFigures() {
+            for (let row = 0; row < BOARD_ROWS; row++) {
+                for (let col = 0; col < BOARD_COLS; col++) {
+                    if (board[row][col] === 'o') {
+                        drawCircle(col, row);
+                    } else if (board[row][col] === 'x') {
+                        drawCross(col, row);
+                    }
+                }
+            }
+        }
+
+        function drawCircle(col, row) {
+            context.beginPath();
+            context.arc(col * SQUARE_SIZE + SQUARE_SIZE / 2, row * SQUARE_SIZE + SQUARE_SIZE / 2, CIRCLE_RADIUS, 0, Math.PI * 2);
+            context.lineWidth = CIRCLE_WIDTH;
+            context.strokeStyle = CIRCLE_COLOR;
+            context.stroke();
+        }
+
+        function drawCross(col, row) {
+            context.lineWidth = CROSS_WIDTH;
+            context.strokeStyle = CROSS_COLOR;
+            context.beginPath();
+            context.moveTo(col * SQUARE_SIZE + SPACE, row * SQUARE_SIZE + SPACE);
+            context.lineTo((col + 1) * SQUARE_SIZE - SPACE, (row + 1) * SQUARE_SIZE - SPACE);
+            context.stroke();
+            context.beginPath();
+            context.moveTo((col + 1) * SQUARE_SIZE - SPACE, row * SQUARE_SIZE + SPACE);
+            context.lineTo(col * SQUARE_SIZE + SPACE, (row + 1) * SQUARE_SIZE - SPACE);
+            context.stroke();
+        }
+
+        function isWinner(player) {
+            for (let row = 0; row < BOARD_ROWS; row++) {
+                if (board[row][0] === player && board[row][1] === player && board[row][2] === player) {
+                    return true;
+                }
+            }
+            for (let col = 0; col < BOARD_COLS; col++) {
+                if (board[0][col] === player && board[1][col] === player && board[2][col] === player) {
+                    return true;
+                }
+            }
+            if (board[0][0] === player && board[1][1] === player && board[2][2] === player) {
+                return true;
+            }
+            if (board[2][0] === player && board[1][1] === player && board[0][2] === player) {
+                return true;
+            }
+            return false;
+        }
+
+        function isBoardFull() {
+            return board.flat().every(cell => cell !== null);
+        }
+
+        function getAvailableActions() {
+            let availableActions = [];
+            for (let row = 0; row < BOARD_ROWS; row++) {
+                for (let col = 0; col < BOARD_COLS; col++) {
+                    if (board[row][col] === null) {
+                        availableActions.push({ row, col });
+                    }
+                }
+            }
+            return availableActions;
+        }
+
+        function getState() {
+            return board.flat().map(cell => (cell === 'o' ? 1 : cell === 'x' ? 2 : 0)).join(',');
+        }
+
+        function chooseAction(state) {
+            let availableActions = getAvailableActions();
+            if (availableActions.length === 0) return null;
+
+            if (Math.random() < Q_LEARNING_EPSILON) {
+                return availableActions[Math.floor(Math.random() * availableActions.length)];
+            } else {
+                let qValues = availableActions.map(action => qTable[`${action.row},${action.col}`][0]);
+                let maxQValue = Math.max(...qValues);
+                let bestActions = availableActions.filter(action => qTable[`${action.row},${action.col}`][0] === maxQValue);
+                return bestActions[Math.floor(Math.random() * bestActions.length)];
+            }
+        }
+
+        function aiMove() {
+            let state = getState();
+            let action = chooseAction(state);
+            if (action) {
+                board[action.row][action.col] = 'x';
+            }
+        }
+
+        function updateQTable(reward, done) {
+            let state = getState();
+            reward = (done && winner === 'x') ? 1 : (done && winner === 'o') ? -1 : 0;
+            if (lastState !== null && lastAction !== null) {
+                let lastQValue = qTable[`${lastAction.row},${lastAction.col}`];
+                let bestFutureQ = Math.max(...getAvailableActions().map(action => qTable[`${action.row},${action.col}`][0]), 0);
+                let newQValue = (1 - Q_LEARNING_ALPHA) * lastQValue[0] + Q_LEARNING_ALPHA * (reward + Q_LEARNING_GAMMA * bestFutureQ);
+                qTable[`${lastAction.row},${lastAction.col}`] = [newQValue, 0, 0];
+            }
+        }
+
+        function displayMessage(text) {
+            messageDiv.textContent = text;
+            setTimeout(() => messageDiv.textContent = '', 2000);
+        }
+
+        function restartGame() {
+            board = Array.from({ length: BOARD_ROWS }, () => Array(BOARD_COLS).fill(null));
+            player = 'o';
+            gameOver = false;
+            winner = null;
+            gameStarted = false;
+            drawBoard();
+            drawFigures();
+        }
+
+        function handleClick(event) {
+            if (gameOver) return;
+            let rect = canvas.getBoundingClientRect();
+            let x = event.clientX - rect.left;
+            let y = event.clientY - rect.top;
+            let row = Math.floor(y / SQUARE_SIZE);
+            let col = Math.floor(x / SQUARE_SIZE);
+
+            if (board[row][col] === null) {
+                board[row][col] = player;
+                if (isWinner(player)) {
+                    gameOver = true;
+                    winner = player;
+                    displayMessage(`${player.toUpperCase()} Wins!`);
+                } else if (isBoardFull()) {
+                    gameOver = true;
+                    displayMessage('It\'s a Draw!');
+                } else {
+                    player = player === 'o' ? 'x' : 'o';
+                    if (player === 'x') {
+                        aiMove();
+                        if (isWinner('x')) {
+                            gameOver = true;
+                            winner = 'x';
+                            displayMessage('AI Wins!');
+                        } else if (isBoardFull()) {
+                            gameOver = true;
+                            displayMessage('It\'s a Draw!');
+                        } else {
+                            player = 'o';
+                        }
+                    }
+                }
+                drawBoard();
+                drawFigures();
+                updateQTable(0, gameOver);
+                lastState = getState();
+                lastAction = null;
+            }
+        }
+
+        function handlePlayButtonClick() {
+            gameStarted = true;
+            restartGame();
+            playButton.style.display = 'none';
+            playAgainButton.style.display = 'block';
+        }
+
+        function handlePlayAgainButtonClick() {
+            restartGame();
+        }
+
+        canvas.addEventListener('click', handleClick);
+        playButton.addEventListener('click', handlePlayButtonClick);
+        playAgainButton.addEventListener('click', handlePlayAgainButtonClick);
+
+        drawBoard();
+    </script>
+</body>
+</html>
